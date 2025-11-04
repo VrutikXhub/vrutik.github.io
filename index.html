@@ -158,19 +158,30 @@
     window.open('https://t.me/VruXHUB', '_blank');
   });
   </script>
-<audio id="bg-music" autoplay loop controls muted playsinline>
+<!-- Hidden autoplaying audio -->
+<audio id="bg-music" autoplay loop muted playsinline style="display:none">
   <source src="Max Brhon - Cyberpunk.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-  // Unmute after user interacts (browser restriction bypass)
-  document.addEventListener('click', () => {
-    const audio = document.getElementById('bg-music');
-    audio.muted = false;
-    audio.play();
-  });
-</script>
+  const audio = document.getElementById('bg-music');
 
+  // Try autoplay (muted, allowed by browsers)
+  document.addEventListener('DOMContentLoaded', () => {
+    audio.play().catch(() => {});
+  });
+
+  // Unmute when user interacts
+  function enableSoundOnce() {
+    audio.muted = false;
+    audio.play().catch(() => {});
+    document.removeEventListener('click', enableSoundOnce);
+    document.removeEventListener('touchstart', enableSoundOnce);
+  }
+
+  document.addEventListener('click', enableSoundOnce);
+  document.addEventListener('touchstart', enableSoundOnce);
+</script>
 </body>
 </html>
 </body>
